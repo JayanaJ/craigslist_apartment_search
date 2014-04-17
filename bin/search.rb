@@ -8,11 +8,12 @@ class Search
   URL3 = "&maxAsk="
   URL4 = "&bedrooms=2&housing_type=1&excats="
 
-  attr_accessor :min, :max
+  attr_accessor :min, :max, :links
 
   def initialize(min = 2000, max = 3000)
     @min = min
     @max = max
+    @links = []
   end
 
   def url(index)
@@ -25,6 +26,7 @@ class Search
 
   def run
     (1..25).each do |index|
+      # debugger if index == 2
       doc = Nokogiri::HTML(open(url(index)))
       get_links(doc)
       puts "saved links #{index}-#{index * 100}"
@@ -32,7 +34,6 @@ class Search
   end
 
   def get_links(doc)
-    links = []
     doc.css(".row .pl").each_with_index do |node, index|
       # debugger
       bedrooms = parse_bedroom(index, doc)
@@ -49,7 +50,6 @@ class Search
        :image_url => image_url
      }
     end
-    persist(links)
   end
 
   def image_exists?(image_url, links)
@@ -96,18 +96,10 @@ class Search
     doc.css(".row .l2")[index].children[2].text.match(/\d\w{2}/)[0]
   end
 
-  def persist(links)
+  def persist
     links.each do |link|
-      create_apartment(link)
+      Apartment.create(link)
     end
   end
 
-  def create_apartment(row)
-    Apartment.create(row)
-  end
-
 end
-
-search = Search.new
-search.run
-search.persist
