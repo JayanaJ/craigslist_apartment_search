@@ -1,5 +1,5 @@
 namespace :db do
-  desc "clear all apartments"
+  desc "run script to update apartments in db"
   task :populate => :environment do
     search = Search.new
     search.run
