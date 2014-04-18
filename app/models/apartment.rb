@@ -4,7 +4,7 @@ class Apartment < ActiveRecord::Base
   LOCATIONS = ["Carroll Gardens", "Cobble Hill", "Boerum Hill", "brooklyn heights"] 
   
   def self.good
-    Apartment.where(:location => find_good_hoods)
+    Apartment.where(:location => find_good_hoods, :order => "descending").
   end
 
   def self.old_good
@@ -19,7 +19,7 @@ class Apartment < ActiveRecord::Base
     end
     good_hoods
   end
-  
+
   def self.create_regex
     Regexp.new(LOCATIONS.collect{|location| ".*#{location.gsub(" ", ".*")}.*"}.join("|"), "i")
   end
