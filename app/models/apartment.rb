@@ -4,7 +4,7 @@ class Apartment < ActiveRecord::Base
   LOCATIONS = ["Carroll Gardens", "Cobble Hill", "Boerum Hill", "brooklyn heights"] 
   
   def self.good
-    Apartment.where(:location => find_good_hoods, :order => "descending")
+    Apartment.where(:location => find_good_hoods).order("created_at DESC")
   end
 
   def self.old_good
