@@ -32,6 +32,7 @@ class Search
 
   def get_links(doc)
     doc.css(".row .pl").each_with_index do |node, index|
+      binding.pry
       bedrooms = parse_bedroom(index, doc)
       next if bedrooms.to_i > 2
       next if Apartment.exists?(:description => parse_description(node))
@@ -89,6 +90,7 @@ class Search
   end
 
   def parse_bedroom(index, doc)
+    # node.children[7].children[2].text.match(/\d\w{2}/)[0]
     doc.css(".row .l2")[index].children[2].text.match(/\d\w{2}/)[0]
   end
 
