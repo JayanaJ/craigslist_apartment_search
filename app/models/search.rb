@@ -24,7 +24,6 @@ class Search
 
   def run
     (1..25).each do |index|
-      # debugger if index == 2
       doc = Nokogiri::HTML(open(url(index)))
       get_links(doc)
       puts "saved links #{index}-#{index * 100}"
@@ -33,7 +32,6 @@ class Search
 
   def get_links(doc)
     doc.css(".row .pl").each_with_index do |node, index|
-      # debugger
       bedrooms = parse_bedroom(index, doc)
       next if bedrooms.to_i > 2
       next if Apartment.exists?(:description => parse_description(node))
