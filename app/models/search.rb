@@ -1,6 +1,9 @@
 require 'open-uri'
-class Search
+require 'pry'
+require 'pry-nav'
+require 'nokogiri'
 
+class Search
   URL = "http://newyork.craigslist.org/search/aap/brk?s="
   URL2 = "catAbb=aap&query=&minAsk="
   URL3 = "&maxAsk="
@@ -32,7 +35,6 @@ class Search
 
   def get_links(doc)
     doc.css(".row .pl").each_with_index do |node, index|
-      binding.pry
       bedrooms = parse_bedroom(index, doc)
       next if bedrooms.to_i > 2
       next if Apartment.exists?(:description => parse_description(node))
@@ -70,11 +72,11 @@ class Search
   end
 
   def parse_description(node)
-    node.children[3].children.text
+    node.children[1].children.text
   end
 
   def parse_href(index, node)
-    node.children[3].attributes["href"].value
+    node.children[1].attributes["href"].value
   end
 
   def parse_price(index, doc)
@@ -101,3 +103,6 @@ class Search
   end
 
 end
+
+search = Search.new
+search.run
